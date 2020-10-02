@@ -15,29 +15,19 @@
         <ul class="navbar-nav ml-auto">
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="tooltip" title="Create attendance">
-                    <svg width="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round" class="css-i6dzq1" viewBox="0 0 24 24">
-                        <path d="M12 5v14M5 12h14" />
-                    </svg>
+                <a class="nav-link" href="{{ url_for('dashboard') }}">
+                    <svg class="mr-1" width="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M4 17l6-6-6-6M12 19h8" />
+                    </svg>Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" data-toggle="tooltip" title="Take attendance">
-                    <svg width="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <path d="M17 11l2 2 4-4" />
-                    </svg>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}" data-toggle="tooltip" title="Logout">
-                    <svg width="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round" class="css-i6dzq1" viewBox="0 0 24 24">
+                <a class="nav-link" href="{{ url_for('logout') }}">
+                    <svg class="mr-1" width="24" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1" viewBox="0 0 24 24">
                         <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
-                    </svg>
+                    </svg>Logout
                 </a>
             </li>
             {% else %}

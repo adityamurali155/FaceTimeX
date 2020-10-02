@@ -63,7 +63,7 @@ def github_authorized(blueprint, token):
         login_user(user)
 
     flash("Successfully signed in with GitHub.", category="success")
-    return redirect(url_for('index'))
+    return redirect(url_for('dashboard'))
 
 
 @oauth_authorized.connect_via(google_blueprint)
@@ -109,4 +109,4 @@ def google_authorized(blueprint, token):
         login_user(user)
 
     flash("Successfully signed in with Google.", category="success")
-    return redirect(url_for('index'))
+    return redirect(url_for('dashboard'))
