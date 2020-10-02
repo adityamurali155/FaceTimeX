@@ -10,4 +10,4 @@ Jinja2
 Werkzeug
 gunicorn
 blinker
-psycopg
+psycopg2
