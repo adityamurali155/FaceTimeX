@@ -6,7 +6,7 @@ from flask_dance.contrib.github import make_github_blueprint
 from flask_dance.contrib.google import make_google_blueprint
 from flask_dance.consumer.storage.sqla import SQLAlchemyStorage
 
-from app.models import db, OAuth
+from app.models import db, OAuth, User
 
 storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
 github_blueprint = make_github_blueprint(storage=storage)
