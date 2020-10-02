@@ -11,8 +11,9 @@ app = Flask(__name__)
 app.config.from_object(Config)
 bcrypt.init_app(app)
 db.init_app(app)
-db.create_all()
 
+with app.app_context():
+    db.create_all()
 
 login_manager = LoginManager()
 login_manager.login_message = "Login to access this page"
