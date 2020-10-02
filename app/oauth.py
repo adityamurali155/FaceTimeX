@@ -10,7 +10,14 @@ from app.models import db, OAuth
 
 storage = SQLAlchemyStorage(OAuth, db.session, user=current_user)
 github_blueprint = make_github_blueprint(storage=storage)
-google_blueprint = make_google_blueprint(storage=storage)
+google_blueprint = make_google_blueprint(
+    storage=storage,
+    scope=[
+        "openid",
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email"
+    ]
+)
 
 
 @oauth_authorized.connect_via(github_blueprint)

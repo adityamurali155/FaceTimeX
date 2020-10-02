@@ -1,4 +1,5 @@
 from flask_login import UserMixin
+from flask_dance.consumer.storage.sqla import OAuthConsumerMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -24,13 +25,10 @@ class User(UserMixin, db.Model):
         self.password = bcrypt.generate_password_hash(password, rounds=10)
 
 
-class OAuth(db.Model):
+class OAuth(OAuthConsumerMixin, db.Model):
 
     __tablename__ = "oauth_sessions"
 
-    id = db.Column(db.Integer, primary_key=True)
-    provider = db.Column(db.String, nullable=False)
-    provider_user_id = db.Column(db.String, nullable=False)
-    token = db.Column(db.String, nullable=False)
+    provider_user_id = db.Column(db.String)
     user_id = db.Column(db.Integer, ForeignKey("users.id"))
     user = relationship(User)
