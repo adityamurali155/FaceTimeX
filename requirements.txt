@@ -1,0 +1,12 @@
+python-dotenv
+Flask
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-Login
+Flask-Dance[sqla]
+Flask-QRcode
+Flask-Dance
+Jinja2
+Werkzeug
+gunicorn
+blinker
