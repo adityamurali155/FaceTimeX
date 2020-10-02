@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand navbar-light bg-white">
-    <div class="container">
+    <header class="container">
         <a class="navbar-brand p-0" href="{{ url_for('index') }}">
             <svg style="vertical-align: middle;" width="48" height="48" viewBox="0 0 24 24" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -13,7 +13,7 @@
 
         </a>
         <ul class="navbar-nav ml-auto">
-            {% if not current_user.is_authenticated %}
+            {% if current_user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="#" data-toggle="tooltip" title="Create attendance">
                     <svg width="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
@@ -53,5 +53,5 @@
             </li>
             {% endif %}
         </ul>
-    </div>
+    </header>
 </nav>
