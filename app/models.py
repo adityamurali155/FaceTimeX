@@ -24,6 +24,10 @@ class User(UserMixin, db.Model):
         self.name = name
         self.password = bcrypt.generate_password_hash(password, rounds=10)
 
+    def __init__(self, username, name):
+        self.username = username
+        self.name = name
+
 
 class OAuth(OAuthConsumerMixin, db.Model):
 
