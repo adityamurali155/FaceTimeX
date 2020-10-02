@@ -8,9 +8,10 @@ from app.models import db, bcrypt, User
 from app.oauth import github_blueprint, google_blueprint
 
 app = Flask(__name__)
-app.config.from_object(Config())
-db.init_app(app)
+app.config.from_object(Config)
 bcrypt.init_app(app)
+db.init_app(app)
+db.create_all()
 
 
 login_manager = LoginManager()
