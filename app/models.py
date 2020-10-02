@@ -29,5 +29,5 @@ class OAuth(OAuthConsumerMixin, db.Model):
 
     __tablename__ = "oauth_sessions"
 
-    user_id = db.Column(db.Integer, ForeignKey(User.id))
+    user_id = db.Column(db.Integer, ForeignKey("users.id"))
     user = relationship(User)
