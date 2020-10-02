@@ -19,14 +19,14 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String)
     password = db.Column(db.String)
 
+    def __init__(self, username, name):
+        self.username = username
+        self.name = name
+
     def __init__(self, username, name, password):
         self.username = username
         self.name = name
         self.password = bcrypt.generate_password_hash(password, rounds=10)
-
-    def __init__(self, username, name):
-        self.username = username
-        self.name = name
 
 
 class OAuth(OAuthConsumerMixin, db.Model):
