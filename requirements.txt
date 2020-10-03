@@ -1,4 +1,5 @@
 python-dotenv
+face_recognition
 Flask
 Flask-SQLAlchemy
 Flask-Bcrypt

@@ -1,16 +1,19 @@
 import os
+import pickle
 from flask import Flask, render_template, flash, request, redirect, url_for
-from flask_login import LoginManager, login_user, logout_user, login_required
-
+from flask_login import current_user, LoginManager, login_user, logout_user, login_required
+from flask_qrcode import QRcode
+import face_recognition
 
 from app.config import Config
-from app.models import db, bcrypt, User
+from app.models import db, bcrypt, User, Attendance
 from app.oauth import github_blueprint, google_blueprint
 
 app = Flask(__name__)
 app.config.from_object(Config)
 bcrypt.init_app(app)
 db.init_app(app)
+qrcode = QRcode(app)
 
 with app.app_context():
     db.create_all()
@@ -38,7 +41,83 @@ def index():
 @app.route("/dashboard", methods=["GET"])
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+    setup_face = False
+    face_encoding_path = os.path.join(
+        app.root_path,
+        'data',
+        str(current_user.id) + ".dat"
+    )
+    if not os.path.exists(face_encoding_path):
+        setup_face = True
+
+    attendance = Attendance.query.filter_by(user_id=current_user.id).all()
+    return render_template("dashboard.html", setup_face=setup_face, attendance=attendance)
+
+
+@app.route('/setup-face', methods=["POST"])
+@login_required
+def setup_face():
+    face_encoding_path = os.path.join(
+        app.root_path,
+        'data',
+        str(current_user.id) + ".dat"
+    )
+    if 'image' not in request.files:
+        flash("No image to setup face recognition", category="danger")
+        return redirect(url_for('dashboard'))
+
+    file = request.files['image']
+    if file:
+        image = face_recognition.load_image_file(file)
+        face_encodings = face_recognition.face_encodings(image)
+
+        if len(face_encodings) > 0:
+            with open(face_encoding_path, 'wb') as f:
+                pickle.dump(face_encodings[0], f)
+
+        flash("Successfully setup face recognition", category="success")
+        return redirect(url_for('dashboard'))
+
+
+@app.route('/create', methods=["GET"])
+@login_required
+def create():
+    t = Attendance()
+    t.user = current_user
+    db.session.add(t)
+    db.session.commit()
+
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/take_attendance', methods=["GET"])
+@login_required
+def take_attendance():
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/attendance_download', methods=["GET"])
+@login_required
+def attendance_download():
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/attendance_delete', methods=["GET"])
+@login_required
+def attendance_delete():
+    try:
+        if not request.args.get('id') or request.args.get('id') != "":
+            id = int(request.args.get('id'))
+        else:
+            flash("Internal Server Error", category="danger")
+    except:
+        flash("Internal Server Error", category="danger")
+
+    t = Attendance.query.get(id)
+    db.session.delete(t)
+    db.session.commit()
+
+    return redirect(url_for('dashboard'))
 
 
 @app.route("/login", methods=["GET", "POST"])
