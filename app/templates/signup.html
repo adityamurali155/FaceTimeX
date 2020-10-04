@@ -5,6 +5,13 @@
     {% include "header.html" %}
     <form method="POST" autocomplete="off" class="mt-5 w-100 mx-auto p-3 p-md-5" style="max-width: 420px;">
         <h1 class="mb-5 display-6 font-weight-light text-center">Sign up</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <div class="mb-3">
             <input type="text" name="username" class="form-control" placeholder="Username" autofocus />
         </div>

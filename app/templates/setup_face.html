@@ -15,7 +15,7 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <video autoplay class="img-fluid w-100 rounded mx-auto d-block"></video>
+                    <video id="setupVideo" autoplay class="img-fluid w-100 rounded mx-auto d-block"></video>
                 </div>
             </div>
             <div class="modal-footer">
@@ -38,7 +38,7 @@
 </script>
 
 <script>
-    var videoElement = document.querySelector('video');
+    var videoElement = document.querySelector('video#setupVideo');
     var videoSelect = document.querySelector('select#videoSelect')
     var submitButton = document.querySelector('button#submit')
     var canvas = document.createElement('canvas');
@@ -97,25 +97,29 @@
     }
 
     function dataURItoBlob(dataURI) {
-        // convert base64/URLEncoded data component to raw binary data held in a string
-        var byteString;
-        if (dataURI.split(',')[0].indexOf('base64') >= 0)
-            byteString = atob(dataURI.split(',')[1]);
-        else
-            byteString = unescape(dataURI.split(',')[1]);
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+        var byteString = atob(dataURI.split(',')[1]);
 
         // separate out the mime component
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
 
-        // write the bytes of the string to a typed array
-        var ia = new Uint8Array(byteString.length);
+        // write the bytes of the string to an ArrayBuffer
+        var ab = new ArrayBuffer(byteString.length);
+
+        // create a view into the buffer
+        var ia = new Uint8Array(ab);
+
+        // set the bytes of the buffer to the correct values
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
 
-        return new Blob([ia], { type: mimeString });
-    }
+        // write the ArrayBuffer to a blob, and you're done
+        var blob = new Blob([ab], { type: mimeString });
+        return blob;
 
+    }
 
     function onSubmit() {
         if (window.stream) {
@@ -127,9 +131,8 @@
         canvas.width = videoElement.videoWidth;
         canvas.height = videoElement.videoHeight;
         canvas.getContext('2d').drawImage(videoElement, 0, 0);
-        var image = canvas.toDataURL('image/png');
 
-        var blob = dataURItoBlob(image)
+        var blob = dataURItoBlob(canvas.toDataURL("image/jpeg"))
 
         var formData = new FormData();
         formData.append("image", blob);
@@ -138,7 +141,7 @@
         xhr.open("POST", "/setup-face", false);
         xhr.send(formData);
 
-        window.location.reload()
+        window.location.href = "{{ url_for('dashboard') }}"
     }
 
 </script>

@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String)
     name = db.Column(db.String)
     password = db.Column(db.String)
+    image = db.Column(db.LargeBinary)
 
     def __init__(self, username, name):
         self.username = username
@@ -37,34 +38,3 @@ class OAuth(OAuthConsumerMixin, db.Model):
     provider_user_id = db.Column(db.String)
     user_id = db.Column(db.Integer, ForeignKey("users.id"))
     user = relationship(User)
-
-
-class Attendance(db.Model):
-
-    __tablename__ = "attendances"
-
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.now
-    )
-    user_id = db.Column(db.Integer, ForeignKey("users.id"))
-    user = relationship(User)
-
-
-class AttendanceRecord(db.Model):
-
-    __tablename__ = "attendance_records"
-
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.now
-    )
-    attendance_id = db.Column(db.Integer, ForeignKey("attendances.id"))
-    attendance = relationship(
-        'Attendance',
-        backref=db.backref('records', lazy=True)
-    )
