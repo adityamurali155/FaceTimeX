@@ -45,8 +45,8 @@
                             Share this QR code to add new candidates
                         </div>
                         <img class="d-block mx-auto mt-3 img-fluid img-thumbnail"
-                            src="{{ qrcode('http://localhost:8080' + url_for('new_candidate', id=current_user.id)) }}"
-                            alt="{{ 'http://localhost:8080' + url_for('new_candidate', id=current_user.id) }}">
+                            src="{{ qrcode('https://aqueous-gorge-64678.herokuapp.com' + url_for('new_candidate', id=current_user.id)) }}"
+                            alt="{{ 'https://aqueous-gorge-64678.herokuapp.com' + url_for('new_candidate', id=current_user.id) }}">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -191,8 +191,8 @@
                                             Share this QR code to your candidates
                                         </div>
                                         <img class="d-block mx-auto mt-3 img-fluid img-thumbnail"
-                                            src="{{ qrcode('http://localhost:8080' + url_for('take_attendance', id=t.id)) }}"
-                                            alt="{{ 'http://localhost:8080' + url_for('take_attendance', id=t.id) }}">
+                                            src="{{ qrcode('https://aqueous-gorge-64678.herokuapp.com' + url_for('take_attendance', id=t.id)) }}"
+                                            alt="{{ 'https://aqueous-gorge-64678.herokuapp.com' + url_for('take_attendance', id=t.id) }}">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
