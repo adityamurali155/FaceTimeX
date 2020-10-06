@@ -105,13 +105,17 @@ def dashboard():
     page = request.args.get('page', 1, type=int)
 
     if tab == "attendance":
-        list = Attendance.query.order_by(
+        list = Attendance.query
+        .filter_by(user=current_user)
+        .order_by(
             Attendance.created_at.desc()
         ).paginate(
             page, 10, error_out=False
         )
     elif tab == "candidates":
-        list = Candidate.query.order_by(
+        list = Candidate.query
+        .filter_by(user=current_user)
+        .order_by(
             Candidate.last_attendance.desc()
         ).paginate(
             page, 10, error_out=False
