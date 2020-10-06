@@ -25,7 +25,9 @@ class User(UserMixin, db.Model):
         self.username = username
         self.name = name
         if password is not None:
-            self.password = bcrypt.generate_password_hash(password, rounds=10)
+            self.password = bcrypt
+            .generate_password_hash(password, rounds=10)
+            .decode('utf-8')
 
 
 class OAuth(OAuthConsumerMixin, db.Model):
