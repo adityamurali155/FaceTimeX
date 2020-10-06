@@ -1,0 +1,16 @@
+python-dotenv
+face_recognition
+numpy
+Flask
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-Login
+Flask-Dance[sqla]
+Flask-QRcode
+Flask-Excel
+pyexcel-xls
+Flask-Dance
+Jinja2
+Werkzeug
+gunicorn
+blinker

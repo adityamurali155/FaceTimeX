@@ -1,15 +1,2 @@
-python-dotenv
-face_recognition
-Pillow
-Flask
-Flask-SQLAlchemy
-Flask-Bcrypt
-Flask-Login
-Flask-Dance[sqla]
-Flask-QRcode
-Flask-Dance
-Jinja2
-Werkzeug
-gunicorn
-blinker
+-r requirements-dev.txt
 psycopg2

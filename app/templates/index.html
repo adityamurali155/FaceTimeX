@@ -278,6 +278,7 @@
             </svg>
         </div>
     </section>
+    {% if not current_user.is_authenticated %}
     <section
         class="mt-5 container d-flex flex-column justify-content-center align-items-center p-3 p-md-5 bg-dark text-white rounded-top">
         <div class="mt-2 d-flex flex-column flex-md-row justify-content-center align-items-center">
@@ -286,5 +287,6 @@
             <a class="btn btn-outline-light btn-lg" href="/login">Login</a>
         </div>
     </section>
+    {% endif %}
 </main>
 {% endblock content %}

@@ -1,0 +1,154 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main class="d-flex min-vh-100 flex-column bg-light">
+    {% include "header.html" %}
+    <section class="container py-5" style="max-width: 480px;">
+        <h1 class="mb-5 display-5 font-weight-light">Take attendance</h1>
+
+        <div id="danger-alert" class="d-none mb-3 alert alert-danger">
+            Please try again with proper lighting in an isolated environment
+        </div>
+        <div id="failed-alert" class="d-none mb-3 alert alert-danger">
+            Failed to recognize a candidate. Please try again
+        </div>
+
+        <form autocomplete="off" id="takeAttendanceForm" action="{{ url_for('take_attendance', id=id) }}" method="POST"
+            enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="videoSelect" class="form-label">Select camera</label>
+                <select id="videoSelect" class="form-select" aria-label="Select camera">
+                    <option>None</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <video id="userVideo" autoplay class="img-fluid w-100 rounded mx-auto d-block"></video>
+            </div>
+            <button class="btn btn-primary" id="submitButton" type="button">Submit</button>
+        </form>
+
+    </section>
+    <script>
+        var videoElement = document.querySelector('video#userVideo');
+        var videoSelect = document.querySelector('select#videoSelect');
+        var form = document.querySelector('form#takeAttendanceForm');
+        var submitButton = document.querySelector('button#submitButton');
+        var canvas = document.createElement('canvas');
+
+        videoSelect.onchange = getStream;
+        submitButton.onclick = onSubmit;
+
+        navigator.mediaDevices.enumerateDevices()
+            .then(gotDevices).then(getStream).catch(handleError);
+
+        function gotDevices(deviceInfos) {
+            for (let i = 0; i !== deviceInfos.length; ++i) {
+                const deviceInfo = deviceInfos[i];
+                const option = document.createElement('option');
+                option.value = deviceInfo.deviceId;
+                if (deviceInfo.kind === 'videoinput') {
+                    option.text = deviceInfo.label || 'camera ' +
+                        (videoSelect.length + 1);
+                    videoSelect.appendChild(option);
+                } else {
+                    console.log('Found another kind of device: ', deviceInfo);
+                }
+            }
+        }
+
+        function getStream() {
+            if (window.stream) {
+                window.stream.getTracks().forEach(track => {
+                    track.stop();
+                });
+            }
+            const videoSource = videoSelect.value;
+            if (videoSource == "None") {
+                submitButton.disabled = true;
+                return;
+            }
+            else {
+                submitButton.disabled = false;
+                const constraints = {
+                    video: { deviceId: videoSource ? { exact: videoSource } : undefined }
+                };
+                return navigator.mediaDevices.getUserMedia(constraints).
+                    then(gotStream).catch(handleError);
+            }
+        }
+
+        function gotStream(stream) {
+            window.stream = stream; // make stream available to console
+            videoSelect.selectedIndex = [...videoSelect.options].
+                findIndex(option => option.text === stream.getVideoTracks()[0].label);
+            videoElement.srcObject = stream;
+        }
+
+        function handleError(error) {
+            console.error('Error: ', error);
+        }
+
+        function dataURItoBlob(dataURI) {
+            // convert base64 to raw binary data held in a string
+            // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+            var byteString = atob(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+            // write the bytes of the string to an ArrayBuffer
+            var ab = new ArrayBuffer(byteString.length);
+
+            // create a view into the buffer
+            var ia = new Uint8Array(ab);
+
+            // set the bytes of the buffer to the correct values
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            // write the ArrayBuffer to a blob, and you're done
+            var blob = new Blob([ab], { type: mimeString });
+            return blob;
+
+        }
+
+        function onSubmit() {
+            if (window.stream) {
+                submitButton.disabled = true
+                window.stream.getTracks().forEach(track => {
+                    track.stop();
+                });
+            }
+
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            canvas.getContext('2d').drawImage(videoElement, 0, 0);
+
+            var blob = dataURItoBlob(canvas.toDataURL("image/jpeg"))
+
+            var formData = new FormData(form);
+            formData.append("image", blob);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ url_for('take_attendance', id=id) }}", false);
+            xhr.onreadystatechange = function (e) {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        window.location.href = "{{ url_for('index') }}"
+                    } else if (xhr.status === 401) {
+                        console.log("Unauthorized", xhr.statusText);
+                        document.querySelector('div#danger-alert').classList.add('d-none')
+                        document.querySelector('div#failed-alert').classList.remove('d-none')
+                    } else {
+                        console.log("Error", xhr.statusText);
+                        document.querySelector('div#failed-alert').classList.add('d-none')
+                        document.querySelector('div#danger-alert').classList.remove('d-none')
+                    }
+                }
+            }
+            xhr.send(formData);
+        }
+    </script>
+</main>
+{% endblock content %}
