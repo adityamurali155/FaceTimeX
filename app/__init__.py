@@ -18,10 +18,6 @@ db.init_app(app)
 qrcode = QRcode(app)
 excel.init_excel(app)
 
-with app.app_context():
-    db.create_all()
-    db.session.commit()
-
 login_manager = LoginManager()
 login_manager.login_message = "Login to access this page"
 login_manager.login_message_category = "warning"

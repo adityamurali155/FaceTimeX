@@ -19,16 +19,13 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     username = db.Column(db.String, nullable=False, unique=True)
     name = db.Column(db.String)
-    password = db.Column(db.String)
+    password = db.Column(db.String, nullable=True)
 
-    def __init__(self, username, name):
+    def __init__(self, username, name, password=None):
         self.username = username
         self.name = name
-
-    def __init__(self, username, name, password):
-        self.username = username
-        self.name = name
-        self.password = bcrypt.generate_password_hash(password, rounds=10)
+        if password is not None:
+            self.password = bcrypt.generate_password_hash(password, rounds=10)
 
 
 class OAuth(OAuthConsumerMixin, db.Model):
