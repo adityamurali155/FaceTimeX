@@ -105,23 +105,25 @@ def dashboard():
     page = request.args.get('page', 1, type=int)
 
     if tab == "attendance":
-        list = Attendance.query
-        .filter_by(user=current_user)
-        .order_by(
+        list = Attendance.query.filter_by(
+            user=current_user
+        ).order_by(
             Attendance.created_at.desc()
         ).paginate(
             page, 10, error_out=False
         )
     elif tab == "candidates":
-        list = Candidate.query
-        .filter_by(user=current_user)
-        .order_by(
+        list = Candidate.query.filter_by(
+            user=current_user
+        ).order_by(
             Candidate.last_attendance.desc()
         ).paginate(
             page, 10, error_out=False
         )
     else:
-        list = Record.query.order_by(
+        list = Record.query.filter_by(
+            user=current_user
+        ).order_by(
             Record.created_at.desc()
         ).paginate(
             page, 10, error_out=False
@@ -281,6 +283,7 @@ def take_attendance(id):
                 now = datetime.now()
                 record.candidate = candidates[i]
                 record.attendance = attendance
+                record.user = attendance.user
                 record.created_at = now
                 record.candidate.last_attendance = now
 

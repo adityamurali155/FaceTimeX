@@ -77,3 +77,6 @@ class Record(db.Model):
 
     attendance_id = db.Column(db.Integer, ForeignKey("attendance.id"))
     attendance = relationship(Attendance)
+
+    user_id = db.Column(db.Integer, ForeignKey("users.id"))
+    user = relationship(User)
