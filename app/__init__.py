@@ -49,7 +49,7 @@ def login():
             user = User.query.filter_by(
                 username=request.form["username"]
             ).first()
-            if bcrypt.check_password_hash(user.password, request.form["password"]):
+            if bcrypt.check_password_hash(user.password, request.form["password"].encode('utf-8')):
                 login_user(user)
                 flash("Successfully signed in!", category="success")
                 return redirect(url_for('dashboard'))
