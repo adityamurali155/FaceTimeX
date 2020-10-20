@@ -16,7 +16,7 @@ class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     username = db.Column(db.String, nullable=False, unique=True)
     name = db.Column(db.String)
     password = db.Column(db.String, nullable=True)
@@ -43,7 +43,7 @@ class Candidate(db.Model):
     __tablename__ = "candidates"
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
     last_attendance = db.Column(db.DateTime, nullable=True)
 
     name = db.Column(db.String, nullable=False)
@@ -58,7 +58,7 @@ class Attendance(db.Model):
     __tablename__ = "attendance"
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     description = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, ForeignKey("users.id"))
@@ -70,7 +70,7 @@ class Record(db.Model):
     __tablename__ = "records"
 
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     candidate_id = db.Column(db.Integer, ForeignKey("candidates.id"))
     candidate = relationship(Candidate)
