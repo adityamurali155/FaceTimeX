@@ -3,6 +3,9 @@ import os
 
 class Config(object):
 
+    APP_BASE_URL = os.environ.get(
+        "APP_BASE_URL", "http://localhost:8080"
+    )
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URL", "sqlite:///:memory:"
     )

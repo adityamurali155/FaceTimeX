@@ -44,9 +44,11 @@
                         <div class="alert alert-info">
                             Share this QR code to add new candidates
                         </div>
-                        <a class="d-block mx-auto mt-3 img-fluid img-thumbnail"
-                            src="{{ qrcode('https://aqueous-gorge-64678.herokuapp.com' + url_for('new_candidate', id=current_user.id)) }}"
-                            alt="{{ 'https://aqueous-gorge-64678.herokuapp.com' + url_for('new_candidate', id=current_user.id) }}"></a>
+                        <a href="{{ base_url + url_for('new_candidate', id=current_user.id) }}">
+                            <img class="d-block mx-auto mt-3 img-fluid img-thumbnail"
+                                src="{{ qrcode(base_url + url_for('new_candidate', id=current_user.id)) }}"
+                                alt="{{ base_url + url_for('new_candidate', id=current_user.id) }}"></img>
+                        </a>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -190,9 +192,11 @@
                                         <div class="alert alert-info">
                                             Share this QR code to your candidates
                                         </div>
-                                        <a class="d-block mx-auto mt-3 img-fluid img-thumbnail"
-                                            src="{{ qrcode('https://aqueous-gorge-64678.herokuapp.com' + url_for('take_attendance', id=t.id)) }}"
-                                            alt="{{ 'https://aqueous-gorge-64678.herokuapp.com' + url_for('take_attendance', id=t.id) }}"></a>
+                                        <a href="{{ base_url + url_for('take_attendance', id=t.id) }}">
+                                            <img class="d-block mx-auto mt-3 img-fluid img-thumbnail"
+                                                src="{{ qrcode(base_url + url_for('take_attendance', id=t.id)) }}"
+                                                alt="{{ base_url + url_for('take_attendance', id=t.id) }}"></img>
+                                        </a>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"

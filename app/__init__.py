@@ -15,6 +15,12 @@ app = Flask(__name__)
 app.config.from_object(Config)
 bcrypt.init_app(app)
 db.init_app(app)
+
+with app.app_context():
+    db.create_all()
+    db.session.commit()
+
+
 qrcode = QRcode(app)
 excel.init_excel(app)
 
@@ -26,6 +32,10 @@ login_manager.init_app(app)
 
 app.register_blueprint(github_blueprint)
 app.register_blueprint(google_blueprint)
+
+@app.context_processor
+def inject_app_base_url():
+    return dict(base_url=app.config.get('APP_BASE_URL'))
 
 
 @login_manager.user_loader
